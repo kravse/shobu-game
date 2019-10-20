@@ -1,0 +1,8 @@
+.single-board {
+  text-align: center;
+  margin: 10px;
+}
+
+.single-board-row {
+  display: flex;
+}
