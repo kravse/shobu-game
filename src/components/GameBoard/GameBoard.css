@@ -7,3 +7,11 @@
 .game-board-row {
   display: flex;
 }
+
+.game-board-row:first-of-type {
+  background-color:#c19166;
+}
+
+.game-board-row:last-of-type {
+  background-color: #f5deb3;
+}
