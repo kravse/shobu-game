@@ -6,7 +6,12 @@ class GameBoard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      Squares: [Array(16).fill(null), Array(16).fill(null), Array(16).fill(null), Array(16).fill(null)]
+      Squares: [
+        [ 'X', 'X', 'X', 'X', null, null, null, null, null, null, null, null, 'O', 'O', 'O', 'O'],
+        [ 'X', 'X', 'X', 'X', null, null, null, null, null, null, null, null, 'O', 'O', 'O', 'O'],
+        [ 'X', 'X', 'X', 'X', null, null, null, null, null, null, null, null, 'O', 'O', 'O', 'O'],
+        [ 'X', 'X', 'X', 'X', null, null, null, null, null, null, null, null, 'O', 'O', 'O', 'O']
+      ]
     };
   }
 
