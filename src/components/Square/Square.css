@@ -9,3 +9,7 @@
   font-size: 30px;
   font-weight: 600;
 }
+
+.square.selected {
+  background-color: lightblue;
+}
