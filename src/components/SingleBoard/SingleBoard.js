@@ -9,8 +9,6 @@ class SingleBoard extends React.Component {
   }
 
   renderSquare(i) {
-    // let selected = false;
-    // let canSelect = false
     let selected = false;
     if (this.props.selections.length > 0 &&
       this.props.selections.indexOf(i) > -1) {
@@ -19,7 +17,7 @@ class SingleBoard extends React.Component {
     return (
       <Square
         selected={selected ? 'selected' : ''}
-        // canSelect={!selected && canSelect}
+        canSelect={this.props.validSquares.indexOf(i) > -1}
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i)}
       />

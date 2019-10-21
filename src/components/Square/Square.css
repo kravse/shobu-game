@@ -13,3 +13,7 @@
 .square.selected {
   background-color: lightblue;
 }
+
+.square.selectable:hover {
+  background-color: #d3c9ba;
+}
