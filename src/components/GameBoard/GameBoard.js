@@ -31,7 +31,6 @@ class GameBoard extends React.Component {
 
     let currentDist = Math.abs(currentCoords[0] - nextCoords[0]);
     let nextDist = Math.abs(currentCoords[1] - nextCoords[1]);
-    console.log(currentCoords, currentDist, nextCoords, nextDist)
 
     if (currentDist > 2 ||
       nextDist > 2) {
@@ -62,7 +61,19 @@ class GameBoard extends React.Component {
     return ''
   }
 
+  clearSelected() {
+    let resetSelected = {
+      start: { board: null, square: null },
+      finish: { board: null, square: null }
+    }
+    this.setState({selected: resetSelected})
+  }
+
   handleClick(board, square) {
+    if (this.state.selected.start.board === board && this.state.selected.start.square === square) {
+      this.clearSelected();
+      return;
+    }
     let newSelection = this.canSelect(board, square)
     if (newSelection) {
       let newSelectedState = this.state.selected
