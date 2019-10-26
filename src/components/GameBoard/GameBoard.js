@@ -49,6 +49,13 @@ class GameBoard extends React.Component {
     return valid;
   }
 
+  firstBoardSelected () {
+    return this.state.selected.piece.board !== null &&
+      this.state.selected.piece.square !== null &&
+      this.state.selected.move.board !== null &&
+      this.state.selected.move.square !== null
+  }
+
   canSelect(board, square) {
     let clickedCoordsVal = this.state.squares[board][square]
     if (clickedCoordsVal === this.state.turnVal) {
@@ -69,6 +76,20 @@ class GameBoard extends React.Component {
     }
     this.setState({selected: resetSelected})
   }
+  switchTurn() {
+    let newTurn = this.turnVal === 1 ? 0 : 1;
+    this.setState({turnVal: newTurn});
+  }
+  updateGameState (board, square) {
+    let newSquares = this.state.squares;
+    newSquares[this.state.selected.piece.board][this.state.selected.piece.square] = null;
+    newSquares[this.state.selected.move.board][this.state.selected.move.square] = this.state.turnVal;
+    newSquares[board][square] = null;
+    newSquares[board][this.state.selected.move.square] = this.state.turnVal;
+    this.clearSelected();
+    this.switchTurn();
+    this.setState({squares: newSquares});
+  }
 
   handleClick(board, square) {
     if (this.state.selected.piece.board === board && this.state.selected.piece.square === square) {
@@ -76,28 +97,27 @@ class GameBoard extends React.Component {
       return;
     }
 
-    let newSelection = this.canSelect(board, square);
-    if (newSelection) {
-      let newSelectedState = this.state.selected;
-      newSelectedState[newSelection] = { board: board, square: square };
-      var validSquares = [];
-      if (newSelection === 'piece') {
-        newSelectedState.move = { board: null, square: null };
-        let currentBoard = this.state.squares[board]
-        for (let i = 0; i < currentBoard.length; i++) {
-          if (currentBoard[i] !== null) continue;
-          if (this.isValidSelection(square, i)) {
-            validSquares.push(i);
+    if (this.firstBoardSelected()) {
+      this.updateGameState(board, square)
+    } else {
+      let newSelection = this.canSelect(board, square);
+      if (newSelection) {
+        let newSelectedState = this.state.selected;
+        newSelectedState[newSelection] = { board: board, square: square };
+        var validSquares = [];
+        if (newSelection === 'piece') {
+          newSelectedState.move = { board: null, square: null };
+          let currentBoard = this.state.squares[board]
+          for (let i = 0; i < currentBoard.length; i++) {
+            if (currentBoard[i] !== null) continue;
+            if (this.isValidSelection(square, i)) {
+              validSquares.push(i);
+            }
           }
         }
+        this.setState({ selected: newSelectedState, validSquares: validSquares});
       }
-      this.setState({ selected: newSelectedState, validSquares: validSquares});
     }
-    // let newBoardState = this.state.Squares
-    // newBoardState[board][square] = ''
-    // this.setState({
-    //   squares: newBoardState
-    // })
   }
 
   currentSelections(board) {
