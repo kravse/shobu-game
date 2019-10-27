@@ -77,15 +77,16 @@ class GameBoard extends React.Component {
     this.setState({selected: resetSelected})
   }
   switchTurn() {
-    let newTurn = this.turnVal === 1 ? 0 : 1;
+    let newTurn = this.state.turnVal === 1 ? 0 : 1;
     this.setState({turnVal: newTurn});
   }
   updateGameState (board, square) {
     let newSquares = this.state.squares;
+    let distance = this.state.selected.move.square - this.state.selected.piece.square;
     newSquares[this.state.selected.piece.board][this.state.selected.piece.square] = null;
     newSquares[this.state.selected.move.board][this.state.selected.move.square] = this.state.turnVal;
     newSquares[board][square] = null;
-    newSquares[board][this.state.selected.move.square] = this.state.turnVal;
+    newSquares[board][square + distance] = this.state.turnVal;
     this.clearSelected();
     this.switchTurn();
     this.setState({squares: newSquares});
@@ -97,7 +98,7 @@ class GameBoard extends React.Component {
       return;
     }
 
-    if (this.firstBoardSelected()) {
+    if (this.firstBoardSelected() && this.state.selected.piece.board !== board) {
       this.updateGameState(board, square)
     } else {
       let newSelection = this.canSelect(board, square);
