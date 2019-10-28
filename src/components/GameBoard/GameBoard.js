@@ -25,7 +25,16 @@ class GameBoard extends React.Component {
     return [i % 4, Math.floor(i / 4)];
   }
 
+  // isValidActiveMove(selected) {
+  //   if (!this.firstBoardSelected()) return false;
+  //   let start = this.getCoords(this.state.selected.piece.square)
+  //   let finish = this.getCoords(this.state.selected.move.square)
+  //   [0,0] [2, 2]
+  //   if (start[0])
+  // }
+
   isValidSelection(current, next) {
+    console.log(current, next);
     let valid = true;
     let currentCoords = this.getCoords(current);
     let nextCoords = this.getCoords(next);
@@ -98,8 +107,12 @@ class GameBoard extends React.Component {
       return;
     }
 
-    if (this.firstBoardSelected() && this.state.selected.piece.board !== board) {
-      this.updateGameState(board, square)
+    if (this.state.selected.piece.board !== board) {
+      if (this.isValidActiveMove()) {
+        this.updateGameState(board, square)
+      } else {
+        return;
+      }
     } else {
       let newSelection = this.canSelect(board, square);
       if (newSelection) {
