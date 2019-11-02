@@ -1,6 +1,6 @@
 import React from 'react';
 import './GameBoard.css';
-import SingleBoard from 'components/SingleBoard/SingleBoard'
+import SingleBoard from 'components/SingleBoard/SingleBoard';
 
 class GameBoard extends React.Component {
   constructor(props) {
@@ -12,10 +12,22 @@ class GameBoard extends React.Component {
         move: { board: null, square: null }
       },
       squares: [
-        [ 1, 1, 1, 1, null, null, null, null, null, null, null, null, 0, 0, 0, 0],
-        [ 1, 1, 1, 1, null, null, null, null, null, null, null, null, 0, 0, 0, 0],
-        [ 1, 1, 1, 1, null, null, null, null, null, null, null, null, 0, 0, 0, 0],
-        [ 1, 1, 1, 1, null, null, null, null, null, null, null, null, 0, 0, 0, 0]
+        [ 1, 1, 1, 1,
+          null, null, null, null,
+          null, null, null, null,
+          0, 0, 0, 0],
+        [ 1, 1, 1, 1,
+          null, null, null, null,
+          null, null, null, null,
+          0, 0, 0, 0],
+        [ 1, 1, 1, 1,
+          null, null, null, null,
+          null, null, null, null,
+          0, 0, 0, 0],
+        [ 1, 1, 1, 1,
+          null, null, null, null,
+          null, null, null, null,
+          0, 0, 0, 0]
       ],
       validSquares: []
     };
@@ -30,22 +42,21 @@ class GameBoard extends React.Component {
     let currentCoords = this.getCoords(current);
     let nextCoords = this.getCoords(next);
 
-    let currentDist = Math.abs(currentCoords[0] - nextCoords[0]);
-    let nextDist = Math.abs(currentCoords[1] - nextCoords[1]);
+    let xDistance = Math.abs(currentCoords[0] - nextCoords[0]);
+    let yDistance = Math.abs(currentCoords[1] - nextCoords[1]);
 
-    if (currentDist > 2 ||
-      nextDist > 2) {
+    if (xDistance > 2 ||
+      yDistance > 2) {
         valid = false;
     }
-    if (currentDist === 1 &&
-      nextDist > 1) {
+    if (xDistance === 1 &&
+      yDistance > 1) {
       valid = false;
     }
-    if (currentDist === 2 &&
-      nextDist < 2) {
+    if (xDistance === 2 &&
+      yDistance === 1) {
       valid = false;
     }
-
     return valid;
   }
 
@@ -80,7 +91,17 @@ class GameBoard extends React.Component {
     let newTurn = this.state.turnVal === 1 ? 0 : 1;
     this.setState({turnVal: newTurn});
   }
-  updateGameState (board, square) {
+  moveIsPossible (square) {
+    let currentCoords = this.getCoords(this.state.selected.move.square);
+    let nextCoords = this.getCoords(this.state.selected.piece.square);
+    let xDistance = currentCoords[0] - nextCoords[0]
+    let yDistance = currentCoords[1] - nextCoords[1]
+    let moveCoords = this.getCoords(square);
+    let x = moveCoords[0] + xDistance
+    let y = moveCoords[1] + yDistance
+    return !(x > 3 || x < 0 || y > 3 || y < 0);
+  }
+  movePieces (board, square) {
     let newSquares = this.state.squares;
     let distance = this.state.selected.move.square - this.state.selected.piece.square;
     newSquares[this.state.selected.piece.board][this.state.selected.piece.square] = null;
@@ -97,9 +118,8 @@ class GameBoard extends React.Component {
       this.clearSelected();
       return;
     }
-
     if (this.firstBoardSelected() && this.state.selected.piece.board !== board) {
-      this.updateGameState(board, square)
+      if (this.moveIsPossible(square)) this.movePieces(board, square)
     } else {
       let newSelection = this.canSelect(board, square);
       if (newSelection) {
@@ -124,12 +144,12 @@ class GameBoard extends React.Component {
   currentSelections(board) {
     let selections = []
     if (board === this.state.selected.piece.board) {
-      selections.push(this.state.selected.piece.square)
+      selections.push(this.state.selected.piece.square);
     }
     if (board === this.state.selected.move.board) {
-      selections.push(this.state.selected.move.square)
+      selections.push(this.state.selected.move.square);
     }
-    return selections
+    return selections;
   }
 
   render() {
